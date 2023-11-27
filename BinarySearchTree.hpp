@@ -451,20 +451,26 @@ private:
   //       template, NOT according to the < operator. Use the "less"
   //       parameter to compare elements.
   static Node * insert_impl(Node *node, const T &item, Compare less) {
-    if (less(node->datum, item)){
-      insert_impl(node->right, item, less); //recurse right (look right)
-    }
-    else if (less(item, node->datum)){
-      insert_impl(node->left, item, less); //recurse left (look left)
-    }
-    else{ //null ptr    does this take care of every other case as well? or is the else wrong
+    if (!node){
       Node *newNode = new Node;
       newNode->datum = item;
-      newNode->left = node->left;
-      newNode->right = node->right;
-      return newNode;    
+      newNode->left = nullptr; //node->left;
+      newNode->right = nullptr;//node->right;
+      return newNode; 
+
     }
-    return nullptr; // DELETE
+    else if (less(node->datum, item)){
+      node->right = insert_impl(node->right, item, less); //recurse right (look right)
+      return node;
+    }
+    else {//if (less(item, node->datum)){
+      node->left = insert_impl(node->left, item, less); //recurse left (look left)
+      return node;
+    }
+
+    //change to first if, if(!node){}
+  
+    
   }
 
   // EFFECTS : Returns a pointer to the Node containing the minimum element
@@ -570,7 +576,7 @@ private:
     //   min_greater_than_impl(node->right,val,less);
     // }
     else if(!less(val, node->datum)){ //root is less than val or root=val
-      min_greater_than_impl(node->right,val,less);
+      return min_greater_than_impl(node->right,val,less);
     }
     else{ //node > val
       Node * checkL = min_greater_than_impl(node->left,val,less);
@@ -581,7 +587,6 @@ private:
         return checkL;
       }
     }
-    return nullptr; //DELETE
   }
 
 

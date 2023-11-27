@@ -3,7 +3,7 @@
 
 TEST(test_empty) {
     BinarySearchTree<int> bEmpty;
-    ASSERT_TRUE(b.empty());
+    ASSERT_TRUE(bEmpty.empty());
 
     BinarySearchTree<int> b1;
     b1.insert(2);
@@ -39,7 +39,7 @@ TEST(test_size) {
 
 TEST(test_height) {
     BinarySearchTree<int> bEmpty;
-    ASSERT_EQUAL(b.height(), 0u);
+    ASSERT_EQUAL(bEmpty.height(), 0u);
 
     BinarySearchTree<int> b1;
     b1.insert(2);
