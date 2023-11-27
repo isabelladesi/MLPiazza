@@ -358,7 +358,7 @@ private:
       return 0;
     } 
     else {                                            // non-empty tree
-      return 1 + std::max(height_impl(node>left), height_impl(node->right));
+      return 1 + std::max(height_impl(node->left), height_impl(node->right));
     }
   }
 
@@ -427,9 +427,7 @@ private:
     else {
       return find_impl(node->right, query, less);
     }
-
     // is the case where the element is not found covered???? by recursive method??
-
   }
 
   // REQUIRES: item is not already contained in the tree rooted at 'node'
@@ -455,11 +453,11 @@ private:
       insert_impl(node->left, item, less); //recurse left (look left)
     }
     else{ //null ptr    does this take care of every other case as well? or is the else wrong
-    Node *newNode = new Node;
-    newNode->datum = item;
-    newNode->left = node->left;
-    newNode->right = node->right;
-    return newNode;    
+      Node *newNode = new Node;
+      newNode->datum = item;
+      newNode->left = node->left;
+      newNode->right = node->right;
+      return newNode;    
     }
   }
 
@@ -474,7 +472,7 @@ private:
     if (!node->left) {                // base case
       return node;
     } else {                           // recursive case
-      return min_element_imp(node->left);
+      return min_element_impl(node->left);
     }
   }
 
@@ -487,7 +485,7 @@ private:
     if (!node->right) {                // base case
       return node;
     } else {                           // recursive case
-      return max_element_imp(node->right);
+      return max_element_impl(node->right);
     }
   }
 
@@ -495,7 +493,26 @@ private:
   //          rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static bool check_sorting_invariant_impl(const Node *node, Compare less) {
-    assert(false);
+    if(!node){
+      return true;
+    }
+    Node *lnode = node -> left;
+    Node *rnode = node -> right;
+    bool l;
+    bool r;
+    if(lnode){
+      if(!less(lnode->datum, node->datum)){
+        return false;
+      }
+    }
+    if(rnode){
+      if(!less(node->datum, rnode->datum)){
+        return false;
+      }
+    }
+    l = check_sorting_invariant_impl(node->left, less);
+    r = check_sorting_invariant_impl(node->right, less);
+    return r&&l;
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using an in-order traversal,
@@ -506,7 +523,11 @@ private:
   //       See https://en.wikipedia.org/wiki/Tree_traversal#In-order
   //       for the definition of a in-order traversal.
   static void traverse_inorder_impl(const Node *node, std::ostream &os) {
-    assert(false);
+    if (node) {              // non-empty tree
+      traverse_inorder_impl(node->left, os);
+      os << node->datum << " ";
+      traverse_inorder_impl(node->right, os);
+    }
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using a pre-order traversal,
@@ -517,7 +538,11 @@ private:
   //       See https://en.wikipedia.org/wiki/Tree_traversal#Pre-order
   //       for the definition of a pre-order traversal.
   static void traverse_preorder_impl(const Node *node, std::ostream &os) {
-    assert(false);
+    if (node) {              // non-empty tree
+      os << node->datum << " ";
+      traverse_preorder_impl(node->left, os);
+      traverse_preorder_impl(node->right, os);
+    }
   }
 
   // EFFECTS : Returns a pointer to the Node containing the smallest element
