@@ -367,12 +367,38 @@ private:
   //          tree rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static Node *copy_nodes_impl(Node *node) {
-    assert(false);
+    // do i have to use size / height in this function?
+    //assert height and size of newestNode equal to that of node
+    if (node->left != nullptr && node->right != nullptr){
+      copy_nodes_impl(node->right);
+      copy_nodes_impl(node->left);
+    }
+    else if (node->left != nullptr && node->right == nullptr){
+      copy_nodes_impl(node->left);
+    }
+    else if (node->left == nullptr && node->right != nullptr){
+      copy_nodes_impl(node->right);
+    }
+    else{
+      Node *newestNode = new Node;
+      Node *newRightNode = new Node;
+      Node *newLeftNode = new Node;
+      
+      newRightNode = node->right;
+      newLeftNode = node->left;
+      T data = node->datum;
+      
+      newestNode->datum = data;
+      newestNode->right = newRightNode;
+      newestNode->left = newLeftNode;
+    }
+ 
   }
 
   // EFFECTS: Frees the memory for all nodes used in the tree rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static void destroy_nodes_impl(Node *node) {
+    //start deleting at bottom of path and trickle back to delete all of them
     assert(false);
   }
 
@@ -396,10 +422,10 @@ private:
       return node;
     }
     else if(less(query,node->datum)){
-      return find_impl(node->left, query);
+      return find_impl(node->left, query, less);
     }
     else {
-      return find_impl(node->right, query);
+      return find_impl(node->right, query, less);
     }
 
     // is the case where the element is not found covered???? by recursive method??
@@ -422,12 +448,19 @@ private:
   //       template, NOT according to the < operator. Use the "less"
   //       parameter to compare elements.
   static Node * insert_impl(Node *node, const T &item, Compare less) {
-    // if (!node){ //empty
-
-
-    // }
-  assert(false);
-
+    if (less(node->datum, query)){
+      insert_impl(node->right, item, less); //recurse right (look right)
+    }
+    else if (less(query, node->datum)){
+      insert_impl(node->left, item, less); //recurse left (look left)
+    }
+    else{ //null ptr    does this take care of every other case as well? or is the else wrong
+    Node *newNode = new Node;
+    newNode->datum = item;
+    newNode->left = node->left;
+    newNode->right = node->right;
+    return newNode;    
+    }
   }
 
   // EFFECTS : Returns a pointer to the Node containing the minimum element
