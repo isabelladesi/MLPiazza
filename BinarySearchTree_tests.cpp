@@ -2,9 +2,9 @@
 #include "unit_test_framework.hpp"
 
 
-TEST(test_stub) {
-    // Add your tests here
-    ASSERT_TRUE(true);
+TEST(test_empty) {
+    BinarySearchTree<int> b;
+    ASSERT_EQUAL(b.height(), 0u);
 }
 
 TEST_MAIN()
