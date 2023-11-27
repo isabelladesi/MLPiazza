@@ -403,9 +403,6 @@ private:
   // EFFECTS: Frees the memory for all nodes used in the tree rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static void destroy_nodes_impl(Node *node) {
-    // if (!node){ //node empty
-
-    // }
     //start deleting at bottom of path and trickle back to delete all of them
     assert(false);
     
