@@ -330,7 +330,10 @@ private:
   // NOTE:    This function must run in constant time.
   //          No iteration or recursion is allowed.
   static bool empty_impl(const Node *node) {
-    assert(false);
+    if (!node){
+      return true;
+    }
+    return false;
   }
 
   // EFFECTS: Returns the size of the tree rooted at 'node', which is the
@@ -338,7 +341,12 @@ private:
   //          tree is 0.
   // NOTE:    This function must be tree recursive.
   static int size_impl(const Node *node) {
-    assert(false);
+    if (!node){
+      return 0;
+    }
+    else{
+      return 1 + size_impl(node->left) + size_impl(node->right);
+    }
   }
 
   // EFFECTS: Returns the height of the tree rooted at 'node', which is the
@@ -346,7 +354,12 @@ private:
   //          The height of an empty tree is 0.
   // NOTE:    This function must be tree recursive.
   static int height_impl(const Node *node) {
-    assert(false);
+    if (!node) {                                        // empty tree
+      return 0;
+    } 
+    else {                                            // non-empty tree
+      return 1 + std::max(height_impl(node>left), height_impl(node->right));
+    }
   }
 
   // EFFECTS: Creates and returns a pointer to the root of a new node structure
@@ -376,7 +389,21 @@ private:
   //       Two elements A and B are equivalent if and only if A is
   //       not less than B and B is not less than A.
   static Node * find_impl(Node *node, const T &query, Compare less) {
-    assert(false);
+    if (!node){ //tree is empty
+      return nullptr;
+    }
+    else if(!less(node->datum, query) && !less(query, node->datum)){ //root = query
+      return node;
+    }
+    else if(less(query,node->datum)){
+      return find_impl(node->left, query);
+    }
+    else {
+      return find_impl(node->right, query);
+    }
+
+    // is the case where the element is not found covered???? by recursive method??
+
   }
 
   // REQUIRES: item is not already contained in the tree rooted at 'node'
@@ -395,7 +422,12 @@ private:
   //       template, NOT according to the < operator. Use the "less"
   //       parameter to compare elements.
   static Node * insert_impl(Node *node, const T &item, Compare less) {
-    assert(false);
+    // if (!node){ //empty
+
+
+    // }
+  assert(false);
+
   }
 
   // EFFECTS : Returns a pointer to the Node containing the minimum element
@@ -406,7 +438,11 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the smallest element lives.
   static Node * min_element_impl(Node *node) {
-    assert(false);
+    if (!node->left) {                // base case
+      return node;
+    } else {                           // recursive case
+      return min_element_imp(node->left);
+    }
   }
 
   // EFFECTS : Returns a pointer to the Node containing the maximum element
@@ -415,9 +451,12 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the largest element lives.
   static Node * max_element_impl(Node *node) {
-    assert(false);
+    if (!node->right) {                // base case
+      return node;
+    } else {                           // recursive case
+      return max_element_imp(node->right);
+    }
   }
-
 
   // EFFECTS: Returns whether the sorting invariant holds on the tree
   //          rooted at 'node'.
