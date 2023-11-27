@@ -446,10 +446,10 @@ private:
   //       template, NOT according to the < operator. Use the "less"
   //       parameter to compare elements.
   static Node * insert_impl(Node *node, const T &item, Compare less) {
-    if (less(node->datum, query)){
+    if (less(node->datum, item)){
       insert_impl(node->right, item, less); //recurse right (look right)
     }
-    else if (less(query, node->datum)){
+    else if (less(item, node->datum)){
       insert_impl(node->left, item, less); //recurse left (look left)
     }
     else{ //null ptr    does this take care of every other case as well? or is the else wrong
