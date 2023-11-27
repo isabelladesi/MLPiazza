@@ -368,31 +368,36 @@ private:
   // NOTE:    This function must be tree recursive.
   static Node *copy_nodes_impl(Node *node) {
     // do i have to use size / height in this function?
-    //assert height and size of newestNode equal to that of node
-    if (node->left != nullptr && node->right != nullptr){
-      copy_nodes_impl(node->right);
-      copy_nodes_impl(node->left);
+    //assert height and size of newestNode equal to that of node 
+    if (!node){
+      return nullptr;
     }
-    else if (node->left != nullptr && node->right == nullptr){
-      copy_nodes_impl(node->left);
-    }
-    else if (node->left == nullptr && node->right != nullptr){
-      copy_nodes_impl(node->right);
-    }
+    // else if (node->left != nullptr && node->right != nullptr){
+    //   copy_nodes_impl(node->right);
+    //   copy_nodes_impl(node->left);
+    // }
+    // else if (node->left != nullptr && node->right == nullptr){
+    //   copy_nodes_impl(node->left);
+    // }
+    // else if (node->left == nullptr && node->right != nullptr){
+    //   copy_nodes_impl(node->right);
+    // }
     else{
       Node *newestNode = new Node;
-      Node *newRightNode = new Node;
-      Node *newLeftNode = new Node;
+      // Node *newRightNode = new Node;
+      // Node *newLeftNode = new Node;
       
-      newRightNode = node->right;
-      newLeftNode = node->left;
+      // newRightNode = node->right;
+      // newLeftNode = node->left;
       T data = node->datum;
       
       newestNode->datum = data;
-      newestNode->right = newRightNode;
-      newestNode->left = newLeftNode;
+      newestNode->right = copy_nodes_impl(node->right);
+      newestNode->left = copy_nodes_impl(node->left);
+      // newestNode->right = newRightNode;
+      // newestNode->left = newLeftNode;
+      return newestNode; 
     }
- 
   }
 
   // EFFECTS: Frees the memory for all nodes used in the tree rooted at 'node'.
@@ -459,6 +464,7 @@ private:
       newNode->right = node->right;
       return newNode;    
     }
+    return nullptr; // DELETE
   }
 
   // EFFECTS : Returns a pointer to the Node containing the minimum element
@@ -557,7 +563,25 @@ private:
   //       'less' parameter). Based on the result, you gain some information
   //       about where the element you're looking for could be.
   static Node * min_greater_than_impl(Node *node, const T &val, Compare less) {
-    assert(false);
+    if(node==nullptr){//null ptr aka nothing greater than val
+      return nullptr;
+    }
+    // else if (less(node->datum, val) || (!less(node->datum, val) && !less(val, node->datum))){ //root is less than val or root=val
+    //   min_greater_than_impl(node->right,val,less);
+    // }
+    else if(!less(val, node->datum)){ //root is less than val or root=val
+      min_greater_than_impl(node->right,val,less);
+    }
+    else{ //node > val
+      Node * checkL = min_greater_than_impl(node->left,val,less);
+      if (checkL == nullptr){ //nothing better in left subtree
+        return node;
+      }
+      else{ //found smt greater than val but less than current node
+        return checkL;
+      }
+    }
+    return nullptr; //DELETE
   }
 
 
