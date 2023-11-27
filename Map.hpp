@@ -34,6 +34,8 @@ private:
   class PairComp {
   };
 
+  BinarySearchTree<Pair_type, PairComp> bst;
+
 public:
 
   // OVERVIEW: Maps are associative containers that store elements
@@ -61,11 +63,13 @@ public:
 
 
   // EFFECTS : Returns whether this Map is empty.
-  bool empty() const;
+  bool empty() const{
+    return bst.empty();
+  }
 
-  // EFFECTS : Returns the number of elements in this Map.
-  // NOTE : size_t is an integral type from the STL
-  size_t size() const;
+size_t size() const{
+  return bst.size();
+}
 
   // EFFECTS : Searches this Map for an element with a key equivalent
   //           to k and returns an Iterator to the associated value if found,
