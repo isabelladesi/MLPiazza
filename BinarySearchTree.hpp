@@ -403,9 +403,11 @@ private:
   // EFFECTS: Frees the memory for all nodes used in the tree rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static void destroy_nodes_impl(Node *node) {
-    //start deleting at bottom of path and trickle back to delete all of them
-    assert(false);
-    
+    if (node) {              // non-empty tree
+      destroy_nodes_impl(node->left);
+      destroy_nodes_impl(node->right);
+      delete node;
+    }
   }
 
   // EFFECTS : Searches the tree rooted at 'node' for an element equivalent
@@ -458,7 +460,6 @@ private:
       newNode->left = nullptr; //node->left;
       newNode->right = nullptr;//node->right;
       return newNode; 
-
     }
     else if (less(node->datum, item)){
       node->right = insert_impl(node->right, item, less); //recurse right (look right)
@@ -468,10 +469,7 @@ private:
       node->left = insert_impl(node->left, item, less); //recurse left (look left)
       return node;
     }
-
     //change to first if, if(!node){}
-  
-    
   }
 
   // EFFECTS : Returns a pointer to the Node containing the minimum element

@@ -26,7 +26,7 @@ TEST(test_size) {
     bSame.insert(16);
     bSame.insert(26);
     bSame.insert(39);
-    ASSERT_EQUAL(bSame.size(), 3u);
+    ASSERT_EQUAL(bSame.size(), 7u);
 
     BinarySearchTree<int> bDiff;
     bDiff.insert(2);
@@ -34,7 +34,7 @@ TEST(test_size) {
     bDiff.insert(7);
     bDiff.insert(1);
     bDiff.insert(22);
-    ASSERT_EQUAL(bDiff.size(), 4u);
+    ASSERT_EQUAL(bDiff.size(), 5u);
 }
 
 TEST(test_height) {
@@ -73,13 +73,13 @@ TEST(test_height) {
 //     ASSERT_FALSE(b.check_sorting_invariant());
 // }
 
-// TEST(test_check_sorting_invariant) {
-//     BinarySearchTree<int> b;
-//     b.insert(1);
-//     b.insert(0);
-//     // change first datum to 2, resulting in the first broken tree above
-//     *b.begin() = 2;
-//     ASSERT_FALSE(b.check_sorting_invariant());
-// }
+TEST(test_check_sorting_invariant) {
+    BinarySearchTree<int> b;
+    b.insert(1);
+    b.insert(0);
+    // change first datum to 2, resulting in the first broken tree above
+    *b.begin() = 2;
+    ASSERT_FALSE(b.check_sorting_invariant());
+}
 
 TEST_MAIN()
