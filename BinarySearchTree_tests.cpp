@@ -113,7 +113,8 @@ TEST(test_check_sorting_invariant) {
 }
 
 TEST(test_min_element) {
-    BinarySearchTree<int> b;
+    BinarySearchTree<int> b; //how do u check this then
+    ASSERT_EQUAL(b.min_element(), b.end());
 
     BinarySearchTree<int> b1;
     b1.insert(2);
@@ -140,8 +141,8 @@ TEST(test_min_element) {
 
 TEST(test_max_element) {
     BinarySearchTree<int> b;
+    ASSERT_EQUAL(b.max_element(), b.end()); //this isnt working
   
-
     BinarySearchTree<int> b1;
     b1.insert(2);
     ASSERT_EQUAL(*b1.max_element(), 2);
@@ -167,10 +168,13 @@ TEST(test_max_element) {
 
 TEST(test_min_greater_than) {
     BinarySearchTree<int> b;
+    ASSERT_EQUAL(*b.min_greater_than(0), b.end());
 
     BinarySearchTree<int> b1;
     b1.insert(2);
-    ASSERT_EQUAL(b1.size(), 1);
+    ASSERT_EQUAL(*b1.min_greater_than(0), 2);
+    ASSERT_EQUAL(*b1.min_greater_than(2), 2);
+    ASSERT_EQUAL(*b1.min_greater_than(3), b1.end());
 
     BinarySearchTree<int> bSame;
     bSame.insert(22);
@@ -180,20 +184,16 @@ TEST(test_min_greater_than) {
     bSame.insert(16);
     bSame.insert(26);
     bSame.insert(39);
-    ASSERT_EQUAL(bSame.size(), 7);
-
-    BinarySearchTree<int> bDiff;
-    bDiff.insert(2);
-    bDiff.insert(3);
-    bDiff.insert(7);
-    bDiff.insert(1);
-    bDiff.insert(22);
-    ASSERT_EQUAL(bDiff.size(), 5);
+    ASSERT_EQUAL(*bSame.min_greater_than(16), 22);
+    ASSERT_EQUAL(bSame.min_greater_than(39), bSame.end());
+    ASSERT_EQUAL(bSame.min_greater_than(40), bSame.end());
+    ASSERT_EQUAL(*bSame.min_greater_than(14), 15);
+    ASSERT_EQUAL(*bSame.min_greater_than(30), 39);
 }
 
 TEST(test_find) {
-    BinarySearchTree<int> b;
-   
+    BinarySearchTree<int> b; //same here
+    ASSERT_EQUAL(b.find(1), b.end());
 
     BinarySearchTree<int> b1;
     b1.insert(2);
@@ -213,22 +213,15 @@ TEST(test_find) {
 }
 
 TEST(test_insert) {
-    BinarySearchTree<int> b;
-
-
     BinarySearchTree<int> b1;
     b1.insert(2);
     ASSERT_EQUAL(b1.size(), 1);
+    ASSERT_EQUAL(*b1.find(2), 2);
 
     BinarySearchTree<int> bSame;
     bSame.insert(22);
-    bSame.insert(15);
-    bSame.insert(30);
-    bSame.insert(14);
-    bSame.insert(16);
-    bSame.insert(26);
-    bSame.insert(39);
-    ASSERT_EQUAL(bSame.size(), 7);
+    //bSame.insert(22); should we test if 2 same things get inserted?
+    ASSERT_EQUAL(bSame.size(), 1);
 
     BinarySearchTree<int> bDiff;
     bDiff.insert(2);
@@ -238,6 +231,28 @@ TEST(test_insert) {
     bDiff.insert(22);
     ASSERT_EQUAL(bDiff.size(), 5);
 }
+
+// should we test through the deconstructor?
+// TEST(test_destroy_impl) {
+//     BinarySearchTree<int> b1;
+//     b1.insert(2);
+//     destroy_nodes_impl(b1);
+//     ASSERT_EQUAL(b1.size(), 1);
+//     ASSERT_EQUAL(*b1.find(2), 2);
+
+//     BinarySearchTree<int> bSame;
+//     bSame.insert(22);
+//     //bSame.insert(22); should we test if 2 same things get inserted?
+//     ASSERT_EQUAL(bSame.size(), 1);
+
+//     BinarySearchTree<int> bDiff;
+//     bDiff.insert(2);
+//     bDiff.insert(3);
+//     bDiff.insert(7);
+//     bDiff.insert(1);
+//     bDiff.insert(22);
+//     ASSERT_EQUAL(bDiff.size(), 5);
+// }
 
 
 

@@ -480,7 +480,10 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the smallest element lives.
   static Node * min_element_impl(Node *node) {
-    if (!node->left) {                // base case
+    if (!node){ //tree is empty
+      return nullptr;
+    }
+    else if (!node->left) {                // base case
       return node;
     } else {                           // recursive case
       return min_element_impl(node->left);
@@ -493,7 +496,10 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the largest element lives.
   static Node * max_element_impl(Node *node) {
-    if (!node->right) {                // base case
+    if (!node){ //tree is empty
+      return nullptr;
+    }
+    else if (!node->right) {                // base case
       return node;
     } else {                           // recursive case
       return max_element_impl(node->right);
