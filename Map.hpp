@@ -136,7 +136,9 @@ size_t size() const{
   //           an iterator to the newly inserted element, along with
   //           the value true.
   std::pair<Iterator, bool> insert(const Pair_type &val){
-    return bst.insert(val);
+    const auto &word = val.first; //key
+    auto number = val.second; //value
+    return std::pair(word, number); // Construct and return the result as std::pair<Iterator, bool>
   }
 
   // EFFECTS : Returns an iterator to the first key-value pair in this Map.
