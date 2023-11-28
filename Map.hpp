@@ -67,23 +67,6 @@ public:
   // you should omit them. A user of the class must be able to create,
   // copy, assign, and destroy Maps.
 
-  // Default constructor
-  Map() = default;
-
-  // Destructor
-  ~Map() = default;
-
-  // Copy constructor
-  Map(const Map& other) : bst(other.bst) {}
-
-  // Overloaded assignment operator
-  Map& operator=(const Map& other) {
-    if (this != &other) {
-      bst = other.bst;
-    }
-    return *this;
-  }
-
   // EFFECTS : Returns whether this Map is empty.
   bool empty() const{
     return bst.empty();
@@ -102,7 +85,13 @@ size_t size() const{
   //       using "Value_type()".
   Iterator find(const Key_type& k) const{
     Pair_type dummyValue{k, Value_type()}; // Create a dummy pair with the given key and a default-constructed value
-    return bst.find(dummyValue);
+    Iterator dummy = bst.find(dummyValue);
+    if(bst.end() != dummy){
+      return dummy;
+    }
+    else{
+      return bst.end();
+    }
   }
 
   // MODIFIES: this
@@ -122,9 +111,16 @@ size_t size() const{
   //
   // HINT: http://www.cplusplus.com/reference/map/map/operator[]/
   Value_type& operator[](const Key_type& k){
-    Pair_type keyValuePair(k, Value_type()); // Value-initialize the mapped value
-    Iterator result = bst.insert(keyValuePair); // Insert the key-value pair if it doesn't exist
-    return result.first->second; // Return a reference to the mapped value
+    Pair_type keyPair(k, Value_type()); // Value-initialize the mapped value
+
+    if(bst.end()==bst.find(keyPair)){
+      Iterator result = bst.insert(keyPair); // Insert the key-value pair if it doesn't exist
+      return result->second; // Return a reference to the mapped value
+    }
+    else{
+      Iterator result = bst.find(keyPair); // find the key-value pair
+      return result->second; // Return a reference to the mapped value
+    }
   }
 
   // MODIFIES: this
@@ -136,23 +132,24 @@ size_t size() const{
   //           an iterator to the newly inserted element, along with
   //           the value true.
   std::pair<Iterator, bool> insert(const Pair_type &val){
-    const auto &word = val.first; //key
-    auto number = val.second; //value
-    return std::pair(word, number); // Construct and return the result as std::pair<Iterator, bool>
+    Iterator node = bst.find(val);
+    if(node == bst.end()){
+      std::pair<Iterator, bool> newPair(bst.insert(val), true);
+      return newPair;
+    }
+    else{
+      std::pair<Iterator, bool> newPair(node, false);
+      return newPair;
+    }
   }
 
   // EFFECTS : Returns an iterator to the first key-value pair in this Map.
   Iterator begin() const{
-    // if (root == nullptr) {
-    //   return Map();
-    // }
-    // return Iterator(root, min_element_impl(root), less);
     return bst.begin();
   }
 
   // EFFECTS : Returns an iterator to "past-the-end".
   Iterator end() const{
-    // return Map();
     return bst.end();
   }
 
