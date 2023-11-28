@@ -77,6 +77,17 @@ TEST(test_traverse_inorder) {
     b.traverse_inorder(os);
     // change first datum to 2, resulting in the first broken tree above
     ASSERT_EQUAL(os.str(), "1 2 5 6 7 9 10 ");
+
+    BinarySearchTree<int> bEmpty;
+    std::ostringstream as;
+    bEmpty.traverse_inorder(as);
+    ASSERT_EQUAL(as.str(), "");
+
+    BinarySearchTree<int> b1;
+    std::ostringstream bs;
+    b1.insert(2);
+    b1.traverse_inorder(bs);
+    ASSERT_EQUAL(bs.str(), "2 ");
 }
 
 TEST(test_traverse_preorder) {
@@ -92,16 +103,41 @@ TEST(test_traverse_preorder) {
     b.traverse_preorder(os);
     // change first datum to 2, resulting in the first broken tree above
     ASSERT_EQUAL(os.str(), "6 5 1 2 9 7 10 ");
+
+    BinarySearchTree<int> bEmpty;
+    std::ostringstream as;
+    bEmpty.traverse_preorder(as);
+    ASSERT_EQUAL(as.str(), "");
+
+    BinarySearchTree<int> b1;
+    std::ostringstream bs;
+    b1.insert(2);
+    b1.traverse_preorder(bs);
+    ASSERT_EQUAL(bs.str(), "2 ");
 }
 
-// TEST(test_copy_nodes) {
-//     BinarySearchTree<int> b;
-//     b.insert(1);
-//     b.insert(0);
-//     // change first datum to 2, resulting in the first broken tree above
-//     *b.begin() = 2;
-//     ASSERT_FALSE(b.check_sorting_invariant());
-// }
+TEST(test_copy_nodes) {
+   BinarySearchTree<int> b;
+   b.insert(2);
+   b.insert(1);
+   b.insert(3);
+   
+   BinarySearchTree<int> b_copied(b);
+
+   std::ostringstream as;
+   b.traverse_preorder(as);
+   std::ostringstream bs;
+   b_copied.traverse_preorder(bs);
+   
+   ASSERT_EQUAL(b_copied.size(), b.size());
+   ASSERT_EQUAL(b_copied.height(), b.height());
+   ASSERT_EQUAL(bs.str(), as.str());
+    b.insert(9);
+    b.traverse_preorder(as);
+    ASSERT_NOT_EQUAL(b_copied.size(), b.size());
+    ASSERT_NOT_EQUAL(b_copied.height(), b.height());
+    ASSERT_NOT_EQUAL(bs.str(), as.str());
+}
 
 TEST(test_check_sorting_invariant) {
     BinarySearchTree<int> b;
@@ -168,13 +204,13 @@ TEST(test_max_element) {
 
 TEST(test_min_greater_than) {
     BinarySearchTree<int> b;
-    ASSERT_EQUAL(*b.min_greater_than(0), b.end());
+    ASSERT_EQUAL(b.min_greater_than(0), b.end());
 
     BinarySearchTree<int> b1;
     b1.insert(2);
     ASSERT_EQUAL(*b1.min_greater_than(0), 2);
-    ASSERT_EQUAL(*b1.min_greater_than(2), 2);
-    ASSERT_EQUAL(*b1.min_greater_than(3), b1.end());
+    ASSERT_EQUAL(b1.min_greater_than(2), b.end());
+    ASSERT_EQUAL(b1.min_greater_than(3), b1.end());
 
     BinarySearchTree<int> bSame;
     bSame.insert(22);
