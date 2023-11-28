@@ -76,7 +76,7 @@ TEST(test_traverse_inorder) {
     b.insert(10);
     b.traverse_inorder(os);
     // change first datum to 2, resulting in the first broken tree above
-    ASSERT_EQUAL(os.str(), "2 1 5 6 9 7 10");
+    ASSERT_EQUAL(os.str(), "1 2 5 6 7 9 10");//"2 1 5 6 9 7 10"); //least to greatest
 }
 
 TEST(test_traverse_preorder) {
@@ -91,7 +91,7 @@ TEST(test_traverse_preorder) {
     b.insert(10);
     b.traverse_preorder(os);
     // change first datum to 2, resulting in the first broken tree above
-    ASSERT_EQUAL(os.str(), "6 5 9 1 2 7 10");
+    ASSERT_EQUAL(os.str(), "6 5 1 2 9 7 10");//"6 5 9 1 2 7 10");
 }
 
 // TEST(test_copy_nodes) {
@@ -114,7 +114,6 @@ TEST(test_check_sorting_invariant) {
 
 TEST(test_min_element) {
     BinarySearchTree<int> b;
-    ASSERT_EQUAL(*b.min_element(), nullptr);
 
     BinarySearchTree<int> b1;
     b1.insert(2);
@@ -141,7 +140,7 @@ TEST(test_min_element) {
 
 TEST(test_max_element) {
     BinarySearchTree<int> b;
-    ASSERT_EQUAL(*b.max_element(), nullptr);
+  
 
     BinarySearchTree<int> b1;
     b1.insert(2);
@@ -168,11 +167,10 @@ TEST(test_max_element) {
 
 TEST(test_min_greater_than) {
     BinarySearchTree<int> b;
-    ASSERT_EQUAL(b.min_element(), 0u);
 
     BinarySearchTree<int> b1;
     b1.insert(2);
-    ASSERT_EQUAL(b1.size(), 1u);
+    ASSERT_EQUAL(b1.size(), 1);
 
     BinarySearchTree<int> bSame;
     bSame.insert(22);
@@ -182,7 +180,7 @@ TEST(test_min_greater_than) {
     bSame.insert(16);
     bSame.insert(26);
     bSame.insert(39);
-    ASSERT_EQUAL(bSame.size(), 7u);
+    ASSERT_EQUAL(bSame.size(), 7);
 
     BinarySearchTree<int> bDiff;
     bDiff.insert(2);
@@ -190,17 +188,17 @@ TEST(test_min_greater_than) {
     bDiff.insert(7);
     bDiff.insert(1);
     bDiff.insert(22);
-    ASSERT_EQUAL(bDiff.size(), 5u);
+    ASSERT_EQUAL(bDiff.size(), 5);
 }
 
 TEST(test_find) {
     BinarySearchTree<int> b;
-    ASSERT_EQUAL(*b.find(22), nullptr);
+   
 
     BinarySearchTree<int> b1;
     b1.insert(2);
     ASSERT_EQUAL(*b1.find(2), 2);
-    ASSERT_EQUAL(*b1.find(0), nullptr);
+    ASSERT_EQUAL(b1.find(0), b1.end());
 
     BinarySearchTree<int> bSame;
     bSame.insert(22);
@@ -210,17 +208,17 @@ TEST(test_find) {
     bSame.insert(16);
     bSame.insert(26);
     bSame.insert(39);
-    ASSERT_EQUAL(*bSame.find(0), nullptr);
+    ASSERT_EQUAL(bSame.find(0), bSame.end());
     ASSERT_EQUAL(*bSame.find(26), 26);
 }
 
 TEST(test_insert) {
     BinarySearchTree<int> b;
-    ASSERT_EQUAL(b.min_element(), 0u);
+
 
     BinarySearchTree<int> b1;
     b1.insert(2);
-    ASSERT_EQUAL(b1.size(), 1u);
+    ASSERT_EQUAL(b1.size(), 1);
 
     BinarySearchTree<int> bSame;
     bSame.insert(22);
@@ -230,7 +228,7 @@ TEST(test_insert) {
     bSame.insert(16);
     bSame.insert(26);
     bSame.insert(39);
-    ASSERT_EQUAL(bSame.size(), 7u);
+    ASSERT_EQUAL(bSame.size(), 7);
 
     BinarySearchTree<int> bDiff;
     bDiff.insert(2);
@@ -238,7 +236,7 @@ TEST(test_insert) {
     bDiff.insert(7);
     bDiff.insert(1);
     bDiff.insert(22);
-    ASSERT_EQUAL(bDiff.size(), 5u);
+    ASSERT_EQUAL(bDiff.size(), 5);
 }
 
 
