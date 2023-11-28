@@ -156,6 +156,33 @@ TEST(test_copy_nodes) {
     ASSERT_NOT_EQUAL(bs.str(), as.str());
 }
 
+TEST(test_assignmentOp_nodes) {
+   BinarySearchTree<int> b;
+   b.insert(2);
+   b.insert(1);
+   b.insert(3);
+   
+   BinarySearchTree<int> b_copied;
+    b_copied.insert(4);
+    b_copied.insert(8);
+
+   b_copied = b;
+
+   std::ostringstream as;
+   b.traverse_preorder(as);
+   std::ostringstream bs;
+   b_copied.traverse_preorder(bs);
+   
+   ASSERT_EQUAL(b_copied.size(), b.size());
+   ASSERT_EQUAL(b_copied.height(), b.height());
+   ASSERT_EQUAL(bs.str(), as.str());
+    b.insert(9);
+    b.traverse_preorder(as);
+    ASSERT_NOT_EQUAL(b_copied.size(), b.size());
+    ASSERT_NOT_EQUAL(b_copied.height(), b.height());
+    ASSERT_NOT_EQUAL(bs.str(), as.str());
+}
+
 TEST(test_check_sorting_invariant) {
     BinarySearchTree<int> b;
     b.insert(1);
