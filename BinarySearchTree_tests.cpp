@@ -63,6 +63,23 @@ TEST(test_height) {
     bDiff.insert(22);
     ASSERT_EQUAL(bDiff.height(), 4u);
 }
+// TEST(test_destroy) {
+//     BinarySearchTree<int> bSame;
+//     bSame.insert(22);
+//     bSame.insert(15);
+//     bSame.insert(30);
+
+//    BinarySearchTree<int> b;
+//    b.insert(2);
+//    b.insert(1);
+//    b.insert(3);
+//    BinarySearchTree<int> b_copied(b);
+
+//    delete *b_copied;
+   
+
+//     //delte all nodes from a BST and then assure BinarySearchTree is empty
+// }
 
 TEST(test_traverse_inorder) {
     BinarySearchTree<int> b;
