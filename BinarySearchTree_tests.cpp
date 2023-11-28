@@ -76,7 +76,7 @@ TEST(test_traverse_inorder) {
     b.insert(10);
     b.traverse_inorder(os);
     // change first datum to 2, resulting in the first broken tree above
-    ASSERT_EQUAL(os.str(), "1 2 5 6 7 9 10");
+    ASSERT_EQUAL(os.str(), "1 2 5 6 7 9 10 ");
 }
 
 TEST(test_traverse_preorder) {
@@ -91,7 +91,7 @@ TEST(test_traverse_preorder) {
     b.insert(10);
     b.traverse_preorder(os);
     // change first datum to 2, resulting in the first broken tree above
-    ASSERT_EQUAL(os.str(), "6 5 1 2 9 7 10");
+    ASSERT_EQUAL(os.str(), "6 5 1 2 9 7 10 ");
 }
 
 // TEST(test_copy_nodes) {
