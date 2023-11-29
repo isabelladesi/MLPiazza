@@ -2,17 +2,33 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 #include "csvstream.hpp"
 using namespace std;
 
 class Classifier{
   public:
-  train(csvstream &, bool debug);
+  train(csvstream & trainStream, bool debug){
+    map<string, string> row;
+    string label;
+    while(trainStream >> row){
+      label = row["tag"];
+      if(tags.find(label)!= tags.end()){
+        tags[label] += 1;
+      }
+      else{
+        tags.insert({label, 1});
+      }
+    }
+  }
   test(csvstream &);
 
   private:
   //training steps
-  //   The total number of posts in the entire training set.
+  map<string, int> tags;
+  map<string, int> tagsWithWords; //not right
+  map<string, int> words;
+  // The total number of posts in the entire training set.
   // The number of unique words in the entire training set. (The vocabulary size.)
   // For each word the number of posts in the entire training set that contain 
   // For each label the number of posts with that label.
