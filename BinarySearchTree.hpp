@@ -577,9 +577,6 @@ private:
     if(node==nullptr){//null ptr aka nothing greater than val
       return nullptr;
     }
-    // else if (less(node->datum, val) || (!less(node->datum, val) && !less(val, node->datum))){ //root is less than val or root=val
-    //   min_greater_than_impl(node->right,val,less);
-    // }
     else if(!less(val, node->datum)){ //root is less than val or root=val
       return min_greater_than_impl(node->right,val,less);
     }

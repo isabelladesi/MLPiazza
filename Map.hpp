@@ -84,7 +84,7 @@ size_t size() const{
   //       (key, value) pairs, you'll need to construct a dummy value
   //       using "Value_type()".
   Iterator find(const Key_type& k) const{
-    Pair_type dummyValue{k, Value_type()}; // Create a dummy pair with the given key and a default-constructed value
+    Pair_type dummyValue{k, Value_type()}; 
     Iterator dummy = bst.find(dummyValue);
     if(bst.end() != dummy){
       return dummy;
@@ -114,7 +114,7 @@ size_t size() const{
     Pair_type keyPair(k, Value_type()); // Value-initialize the mapped value
 
     if(bst.end()==bst.find(keyPair)){
-      Iterator result = bst.insert(keyPair); // Insert the key-value pair if it doesn't exist
+      Iterator result = bst.insert(keyPair); // Insert the pair if no exist
       return result->second; // Return a reference to the mapped value
     }
     else{
