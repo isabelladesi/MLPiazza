@@ -11,9 +11,12 @@ using namespace std;
 class Classifier{
   public:
   void train(csvstream & trainStream, bool debug){
-    label(trainStream);
-    word(trainStream);
-    labelWord(trainStream);
+    map<string, string> row;
+    while(trainStream >> row){
+      label(row);
+      word(row);
+      labelWord(row);
+    }
   }
 
   string test(csvstream & testStream){
@@ -88,61 +91,48 @@ class Classifier{
   vector<string> labels; //set
   int totalPosts=0;
   //checks number of labels
-  void label(csvstream & trainStream){
-    map<string, string> row;
-    string tag;
-    int i = 0;
-    while(trainStream >> row){
-      tag = row["tag"];
-      labels[i]=tag; // there are repeats in this!!
-      if(tags.find(tag)!= tags.end()){
-        tags[tag] += 1;
-        totalPosts++;
-      }
-      else{
-        tags.insert({tag, 1});
-      }
-      i++;
-
+  void label(map<string, string> & row){
+    string tag = row["tag"];
+    if(tags.find(tag)!= tags.end()){
+      tags[tag] += 1;
+      totalPosts++;
+    }
+    else{
+      tags.insert({tag, 1});
     }
   }
   //checks number of words
-  void word(csvstream & trainStream){
-    map<string, string> row;
+  void word(map<string, string> & row){
     string word;
-    while(trainStream >> row){
-      word = row["content"];
-      set<string> wordSet = unique_words(word);
-      for (auto it = wordSet.begin(); it != wordSet.end(); ++it) {
-        if(words.find(*it)!= words.end()){
-          words[*it] += 1;
-        }
-        else{
-          words.insert({*it, 1});
-        }
+    word = row["content"];
+    set<string> wordSet = unique_words(word);
+    for (auto it = wordSet.begin(); it != wordSet.end(); ++it) {
+      if(words.find(*it)!= words.end()){
+        words[*it] += 1;
+      }
+      else{
+        words.insert({*it, 1});
       }
     }
   }
+
   //checks labels and words
-  void labelWord(csvstream & trainStream){
-    map<string, string> row;
+  void labelWord(map<string, string> & row){
     string tag;
     string word;
     string tagWord;
-    while(trainStream >> row){
-      tag = row["tag"];
-      word = row["content"];
-      set<string> wordSet = unique_words(word);
+    tag = row["tag"];
+    word = row["content"];
+    set<string> wordSet = unique_words(word);
       for (auto it = wordSet.begin(); it != wordSet.end(); ++it) {
         if((words.find(*it)!= words.end()) && (tags.find(tag)!= tags.end())){
           tagsWords[tag][word] += 1;
         }
         else{
-          tagsWords.insert({tag,{word, 1}}); //figure out syntax
+          tagsWords[tag][word]=1;
         }
       }
-    }
-  } 
+  }
 };
 int main(int argc, char **argv) {
   //open file streams
