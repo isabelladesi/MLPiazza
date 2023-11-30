@@ -372,23 +372,8 @@ private:
     if (!node){
       return nullptr;
     }
-    // else if (node->left != nullptr && node->right != nullptr){
-    //   copy_nodes_impl(node->right);
-    //   copy_nodes_impl(node->left);
-    // }
-    // else if (node->left != nullptr && node->right == nullptr){
-    //   copy_nodes_impl(node->left);
-    // }
-    // else if (node->left == nullptr && node->right != nullptr){
-    //   copy_nodes_impl(node->right);
-    // }
     else{
       Node *newestNode = new Node;
-      // Node *newRightNode = new Node;
-      // Node *newLeftNode = new Node;
-      
-      // newRightNode = node->right;
-      // newLeftNode = node->left;
       T data = node->datum;
       
       newestNode->datum = data;

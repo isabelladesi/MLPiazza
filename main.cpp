@@ -3,37 +3,22 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include "csvstream.hpp"
 using namespace std;
 
 class Classifier{
   public:
-  train(csvstream & trainStream, bool debug){
-    map<string, string> row;
-    string label;
-    while(trainStream >> row){
-      label = row["tag"];
-      if(tags.find(label)!= tags.end()){
-        tags[label] += 1;
-      }
-      else{
-        tags.insert({label, 1});
-      }
-    }
+  void train(csvstream & trainStream, bool debug){
+    label(trainStream);
+    word(trainStream);
+    labelWord(trainStream);
   }
-  test(csvstream &);
+  void test(csvstream & testStream);
 
   private:
   //training steps
-  map<string, int> tags;
-  map<string, int> tagsWithWords; //not right
-  map<string, int> words;
-  // The total number of posts in the entire training set.
-  // The number of unique words in the entire training set. (The vocabulary size.)
-  // For each word the number of posts in the entire training set that contain 
-  // For each label the number of posts with that label.
-  // For each label and word , the number of posts with label that contain 
-
+  int posts;
   // EFFECTS: Return a set of unique whitespace delimited words.x
   set<string> unique_words(const string &str) {
     istringstream source(str);
@@ -44,6 +29,60 @@ class Classifier{
     }
     return words;
   }
+  map<string, int> tags;
+  map<string, map<string,int>> tagsWords; //not right
+  map<string, int> words;
+  //checks number of labels
+  void label(csvstream & trainStream){
+    map<string, string> row;
+    string tag;
+    while(trainStream >> row){
+      tag = row["tag"];
+      if(tags.find(tag)!= tags.end()){
+        tags[tag] += 1;
+      }
+      else{
+        tags.insert({tag, 1});
+      }
+    }
+  }
+  //checks number of words
+  void word(csvstream & trainStream){
+    map<string, string> row;
+    string word;
+    while(trainStream >> row){
+      word = row["content"];
+      set<string> wordSet = unique_words(word);
+      for (auto it = wordSet.begin(); it != wordSet.end(); ++it) {
+        if(words.find(*it)!= words.end()){
+          words[*it] += 1;
+        }
+        else{
+          words.insert({*it, 1});
+        }
+      }
+    }
+  }
+  //checks labels and words
+  void labelWord(csvstream & trainStream){
+    map<string, string> row;
+    string tag;
+    string word;
+    string tagWord;
+    while(trainStream >> row){
+      tag = row["tag"];
+      word = row["content"];
+      set<string> wordSet = unique_words(word);
+      for (auto it = wordSet.begin(); it != wordSet.end(); ++it) {
+        if((words.find(*it)!= words.end()) && (tags.find(tag)!= tags.end())){
+          tagsWords[tag][word] += 1;
+        }
+        else{
+          tagWords.insert({tag,{word, 1}}); //figure out syntax
+        }
+      }
+    }
+  } 
 };
 int main(int argc, char **argv) {
   //open file streams
