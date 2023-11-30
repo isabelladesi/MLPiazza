@@ -78,7 +78,7 @@ class Classifier{
           tagsWords[tag][word] += 1;
         }
         else{
-          tagWords.insert({tag,{word, 1}}); //figure out syntax
+          tagsWords.insert({tag,{word, 1}}); //figure out syntax
         }
       }
     }
