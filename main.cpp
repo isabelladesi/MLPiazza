@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <cmath>
 #include "csvstream.hpp"
 using namespace std;
 
@@ -14,46 +15,59 @@ class Classifier{
     word(trainStream);
     labelWord(trainStream);
   }
-  // void test(csvstream & testStream); { //prediction (math) (parameters: a label, string ofwords in new post)
-  //   set<string> uniqueWords = unique_words(testStream); //gives unique words string
 
-  //   //double prediction = 0;
+  string test(csvstream & testStream){
+    double score;
+    double maxScore;
+    for (int i=0; i <tags.size(); ++i){
+      score = predict(labels[i], testStream);
+      if (score > maxScore){
+        maxScore = score;
+      }
+      score = 0;
+    }
+    return  label;
+  }
+  double predict(string label, csvstream & testStream) { //prediction (math) (parameters: a label, string ofwords in new post)
+    set<string> uniqueWords = unique_words(testStream); //gives unique words string
 
-  //   //log prior
-  //   // double logPrior;
-  //   // int numCTrainP = ...    //number of training posts with label C
-  //   // int numTrainPosts = ...        // number of training posts
-  //   //logPrior = log(numCTrainP/numTrainPosts);
-  //   //prediction += logPrior;
+    double prediction = 0;
 
-  //   for(int i=0; i<uniqueWords.size(); ++i){// each unique word
-  //     //int numCTrainPW = // =function that says how many times word appears in the traininposts with label C ...[i]; //number of training posts with label C that contain W
-  //     //int numTrainPW = //=function that says how many times word appears in all training posts regardless of label
+    //log prior
+    double logPrior;
+    int numCTrainP = tags[label];    //number of training posts with label C tags[,]
+    int numTrainPosts = totalPosts;       // number of training posts
+    logPrior = log(numCTrainP/numTrainPosts);
+    prediction += logPrior;
+
+    for(int i=0; i<uniqueWords.size(); ++i){// each unique word
+      int numCTrainPW = tagsWords[label, uniqueWords[i]]// =function that says how many times word appears in the traininposts with label C ...[i]; //number of training posts with label C that contain W
+      int numTrainPW = //=function that says how many times word appears in all training posts regardless of label
       
-  //     //log liklihood
-  //     //double logLikl = 0;
-  //     if(numCTrainPW==0 && numTrainPW!=0){ //special case 1
-  //       logLikl = log(numTrainPW/numTrainPosts);
-  //     }
-  //     else if(numCTrainPW==0 && numTrainPW==0){
-  //       logLikl = log(1/numTrainPosts);
+      //log liklihood
+      double logLikl = 0;
+      if(numCTrainPW==0 && numTrainPW!=0){ //special case 1
+        logLikl = log(numTrainPW/numTrainPosts);
+      }
+      else if(numCTrainPW==0 && numTrainPW==0){
+        logLikl = log(1/numTrainPosts);
 
-  //     }
-  //     else{
-  //       logLikl = log(numCTrainPW/numCTrainP);
-  //     }
+      }
+      else{
+        logLikl = log(numCTrainPW/numCTrainP);
+      }
 
-  //     prediction += logLikl;
-  //     logLikl=0;
+      prediction += logLikl;
+      logLikl=0;
 
-  //   }
-  //   return prediction; //will return prediction score for a particular label
-  //   // for each label find its score using equation
-  //   // the classifier will pick the label with the highest score
-  //   // there should be n log likelihood terms. n = number of UNIQUE words in string (post)
-  //   //in divisions: cast the numer and denom as double before 
+    }
+    return prediction; //will return prediction score for a particular label
+    // for each label find its score using equation
+    // the classifier will pick the label with the highest score
+    // there should be n log likelihood terms. n = number of UNIQUE words in string (post)
+    //in divisions: cast the numer and denom as double before 
 
-  // }
+  }
 
   private:
   //training steps
@@ -71,18 +85,25 @@ class Classifier{
   map<string, int> tags;
   map<string, map<string,int>> tagsWords; //not right
   map<string, int> words;
+  vector<string> labels; //set
+  int totalPosts=0;
   //checks number of labels
   void label(csvstream & trainStream){
     map<string, string> row;
     string tag;
+    int i = 0;
     while(trainStream >> row){
       tag = row["tag"];
+      labels[i]=tag; // there are repeats in this!!
       if(tags.find(tag)!= tags.end()){
         tags[tag] += 1;
+        totalPosts++;
       }
       else{
         tags.insert({tag, 1});
       }
+      i++;
+
     }
   }
   //checks number of words
