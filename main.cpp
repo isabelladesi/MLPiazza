@@ -19,20 +19,22 @@ class Classifier{
     }
   }
 
-  string test(csvstream & testStream){
+  string correctlyLabel(csvstream & testStream){
     double score;
     double maxScore;
+    string correctLabel;
     for (int i=0; i <tags.size(); ++i){
       score = predict(labels[i], testStream);
       if (score > maxScore){
         maxScore = score;
+        correctLabel = labels[i];
       }
       score = 0;
     }
-    return  label;
+    return  correctLabel;
   }
   double predict(string label, csvstream & testStream) { //prediction (math) (parameters: a label, string ofwords in new post)
-    set<string> uniqueWords = unique_words(testStream); //gives unique words string
+    set<string> uniqueWords = unique_words(words); //gives unique words string. words=long string that holds posts content 
 
     double prediction = 0;
 
