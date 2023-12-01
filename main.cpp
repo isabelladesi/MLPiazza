@@ -33,8 +33,10 @@ class Classifier{
     }
     return  correctLabel;
   }
-  double predict(string label, csvstream & testStream) { //prediction (math) (parameters: a label, string ofwords in new post)
-    set<string> uniqueWords = unique_words(word1); //gives unique words string. words=long string that holds posts content 
+  //prediction (math) (parameters: a label, string ofwords in new post)
+  double predict(string label, csvstream & testStream) { 
+    //gives unique words string. words=long string that holds posts content
+    set<string> uniqueWords = unique_words(word1);  
     auto it = uniqueWords.begin();
     vector<string> allWords;
     int j=0;
@@ -65,8 +67,11 @@ class Classifier{
     for(int i=0; i<uniqueWords.size(); ++i){// each unique word
       map<string,int> innerMap = tagsWords[label];
       
-      int numCTrainPW = innerMap[allWords[i]];//=function that says how many times word appears in the traininposts with label C ...[i]; //number of training posts with label C that contain W
-      int numTrainPW = words[allWords[i]];//=function that says how many times word appears in all training posts regardless of label
+      //=function that says how many times word appears in the traininposts with label C ...[i]; 
+      //number of training posts with label C that contain W
+      int numCTrainPW = innerMap[allWords[i]];
+      //=function that says how many times word appears in all training posts regardless of label
+      int numTrainPW = words[allWords[i]];
       
       //log liklihood
       double logLikl = 0;
