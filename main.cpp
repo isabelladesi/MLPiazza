@@ -155,6 +155,7 @@ int main(int argc, char **argv) {
   //open file streams
   string inputFile = argv[1];
   string testFile = argv[2];
+  string debug = argv[3];
 
   try{
     csvstream input = csvstream(inputFile);
@@ -167,7 +168,7 @@ int main(int argc, char **argv) {
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
     return 1;
   }
-  if ((argc == 4) && ((argv[3])!="--debug")){
+  if ((argc == 4) && (!(debug=="--debug"))){
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
     return 1;
   }
