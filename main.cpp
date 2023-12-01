@@ -54,16 +54,6 @@ class Classifier{
     logPrior = log(numCTrainP/numTrainPosts);
     prediction += logPrior;
 
-    for (const auto& outerPair : tagsWords) {
-        const string& outerKey = outerPair.first;
-        const map<string, int>& innerMap = outerPair.second;
-
-        // Iterate over the inner map
-        for (const auto& innerPair : innerMap) {
-            const string& innerKey = innerPair.first;
-            int value = innerPair.second;
-        }}
-
     for(int i=0; i<uniqueWords.size(); ++i){// each unique word
       map<string,int> innerMap = tagsWords[label];
       
