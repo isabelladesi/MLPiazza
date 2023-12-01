@@ -57,10 +57,11 @@ class Classifier{
     for(int i=0; i<uniqueWords.size(); ++i){// each unique word
       map<string,int> innerMap = tagsWords[label];
       
-      //=function that says how many times word appears in the traininposts with label C ...[i]; 
-      //number of training posts with label C that contain W
+      //=function that says how many times word appears in the traininposts 
+      //with label C ...[i];  number of training posts with label C that contain W
       int numCTrainPW = innerMap[allWords[i]];
-      //=function that says how many times word appears in all training posts regardless of label
+      //=function that says how many times word appears in all 
+      //training posts regardless of label
       int numTrainPW = words[allWords[i]];
       
       //log liklihood
