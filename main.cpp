@@ -34,7 +34,14 @@ class Classifier{
     return  correctLabel;
   }
   double predict(string label, csvstream & testStream) { //prediction (math) (parameters: a label, string ofwords in new post)
-    set<string> uniqueWords = unique_words(words); //gives unique words string. words=long string that holds posts content 
+    set<string> uniqueWords = unique_words(word1); //gives unique words string. words=long string that holds posts content 
+    auto it = uniqueWords.begin();
+    vector<string> allWords;
+    int j=0;
+    for (it=uniqueWords.begin(); it!=uniqueWords.end(); it++){
+      allWords[j] = *it;
+      j++;
+    }
 
     double prediction = 0;
 
@@ -45,9 +52,21 @@ class Classifier{
     logPrior = log(numCTrainP/numTrainPosts);
     prediction += logPrior;
 
+    for (const auto& outerPair : tagsWords) {
+        const string& outerKey = outerPair.first;
+        const map<string, int>& innerMap = outerPair.second;
+
+        // Iterate over the inner map
+        for (const auto& innerPair : innerMap) {
+            const string& innerKey = innerPair.first;
+            int value = innerPair.second;
+        }}
+
     for(int i=0; i<uniqueWords.size(); ++i){// each unique word
-      int numCTrainPW = tagsWords[label, uniqueWords[i]]// =function that says how many times word appears in the traininposts with label C ...[i]; //number of training posts with label C that contain W
-      int numTrainPW = //=function that says how many times word appears in all training posts regardless of label
+      map<string,int> innerMap = tagsWords[label];
+      
+      int numCTrainPW = innerMap[allWords[i]];//=function that says how many times word appears in the traininposts with label C ...[i]; //number of training posts with label C that contain W
+      int numTrainPW = words[allWords[i]];//=function that says how many times word appears in all training posts regardless of label
       
       //log liklihood
       double logLikl = 0;
@@ -88,7 +107,7 @@ class Classifier{
     return words;
   }
   map<string, int> tags;
-  map<string, map<string,int>> tagsWords; //not right
+  map<string, map<string,int>> tagsWords; //label word int
   map<string, int> words;
   vector<string> labels; //set
   int totalPosts=0;
@@ -104,10 +123,10 @@ class Classifier{
     }
   }
   //checks number of words
+  string word1; //string of content
   void word(map<string, string> & row){
-    string word;
-    word = row["content"];
-    set<string> wordSet = unique_words(word);
+    word1 = row["content"];
+    set<string> wordSet = unique_words(word1);
     for (auto it = wordSet.begin(); it != wordSet.end(); ++it) {
       if(words.find(*it)!= words.end()){
         words[*it] += 1;
