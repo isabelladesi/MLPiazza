@@ -19,12 +19,12 @@ class Classifier{
     }
   }
 
-  string correctlyLabel(csvstream & testStream){
+  string correctlyLabel(csvstream & singularPost){ //a post
     double score;
     double maxScore;
     string correctLabel;
-    for (int i=0; i <tags.size(); ++i){
-      score = predict(labels[i], testStream);
+    for (int i=0; i <tags.size(); ++i){ //for each label
+      score = predict(labels[i], singularPost);
       if (score > maxScore){
         maxScore = score;
         correctLabel = labels[i];
@@ -37,10 +37,10 @@ class Classifier{
   double predict(string label, csvstream & testStream) { 
     //gives unique words string. words=long string that holds posts content
     set<string> uniqueWords = unique_words(word1);  
-    auto it = uniqueWords.begin();
+    //auto it = uniqueWords.begin();
     vector<string> allWords;
     int j=0;
-    for (it=uniqueWords.begin(); it!=uniqueWords.end(); it++){
+    for (auto it = uniqueWords.begin(); it!=uniqueWords.end(); it++){
       allWords[j] = *it;
       j++;
     }
@@ -156,13 +156,29 @@ int main(int argc, char **argv) {
   string inputFile = argv[1];
   string testFile = argv[2];
   string debug = argv[3];
-
+  
   try{
     csvstream input = csvstream(inputFile);
     csvstream test = csvstream(testFile);
   } catch(const csvstream_exception &e){
     cout << e.what();
   }
+
+  // how do you read each specific post in the file.
+
+  cout << "test data: "<<endl;
+
+  // string label;
+  // int logScore;
+  //for(int i=0; i<(num of posts in file) < ++i){
+    // label = correctlyLabel(input);//input = singular post
+    // cout<< ", predicted = "<<label;
+    // logScore = predict(input);
+    // cout<< "log-probability score = "<< logScore<<endl;
+    // cout<< "content = "<<input;
+  // }
+
+  
   //-------------------------------
   if (!(argc == 3) || !(argc == 4)){ 
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
