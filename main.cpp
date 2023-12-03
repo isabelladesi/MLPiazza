@@ -10,30 +10,50 @@ using namespace std;
 
 class Classifier{
   public:
-  Classifier(bool debug_in) : debug(debug_in), totalPosts(0), uniqueWords(0){};
+  Classifier(bool debug_in) : totalPosts(0), uniqueWords(0), debug(debug_in){};
 
-  void train(csvstream & trainStream, bool debug){
+  void train(csvstream & trainStream){
     map<string, string> row;
     while(trainStream >> row){
       string words = row["content"];
-      set<string> wordSet = unique_words(words);
-      uniqueWords = uniqueWords + wordSet.size();
-      totalPosts = totalPosts + 1;
+      allWordSet = unique_words(words);
+      // uniqueWords = uniqueWords + allWordSet.size();
+      totalPosts++;
       label(row);
       word(row);
       labelWord(row);
+
+      if(debug == true){
+        cout << "label = " << row["tag"];
+        cout << ", content = " << row["content"] << "\n";
+      }
     }
-    totalPosts = totalPosts - 1;
+
     cout << "trained on " << totalPosts << " examples" << endl;
-    cout << "vocabulary size = " << uniqueWords << endl; 
+    if (debug == true){
+      cout << "vocabulary size = " << words.size() << endl; 
+    }
   }
 
-  string correctlyLabel(csvstream & singularPost){ //a post
+  void completeLabels(){
+    string label;
+    int logScore;
+    for (auto it = allWordSet.begin(); it!=allWordSet.end(); it++){
+      label = correctlyLabel(*it);//input = singular post
+      cout<< ", predicted = "<<label;
+      logScore = predict(*it);
+      cout<< "log-probability score = "<< logScore<<endl;
+      cout<< "content = "<<*it;
+      
+    }
+  }
+
+  string correctlyLabel(string singularPost){ //a post
     double score;
     double maxScore;
     string correctLabel;
     for (int i=0; i <tags.size(); ++i){ //for each label
-      score = predict(labels[i], singularPost);
+      score = predict(labels[i]);
       if (score > maxScore){
         maxScore = score;
         correctLabel = labels[i];
@@ -43,7 +63,7 @@ class Classifier{
     return  correctLabel;
   }
   //prediction (math) (parameters: a label, string ofwords in new post)
-  double predict(string label, csvstream & testStream) { 
+  double predict(string label) { 
     //gives unique words string. words=long string that holds posts content
     set<string> uniqueWords = unique_words(word1);  
     //auto it = uniqueWords.begin();
@@ -113,17 +133,18 @@ class Classifier{
   int totalPosts;
   int uniqueWords;
   bool debug;
+  set<string> allWordSet;
   //checks number of labels
   void label(map<string, string> & row){
     string tag = row["tag"];
     if(tags.find(tag)!= tags.end()){
       tags[tag] += 1;
-      totalPosts++;
     }
     else{
       tags.insert({tag, 1});
     }
   }
+
   //checks number of words
   string word1; //string of content
   void word(map<string, string> & row){
@@ -160,58 +181,25 @@ class Classifier{
 int main(int argc, char **argv) {
   cout.precision(3);
   //open file streams
-  string inputFile = argv[1];
-  string testFile = argv[2];
-  string debug = argv[3];
+  string trainF = argv[1];
+  string testF = argv[2];
+  string debugS = argv[3];
   bool debugBool = false;
-  
-  try{
-    csvstream input = csvstream(inputFile);
-    csvstream test = csvstream(testFile);
-
-    vector<pair<string, string>> row;
-    // map<string, string> row;
-    if(argc == 4){
-      debugBool = true;
-      cout << "training data:" << "\n";
-      
-        while (input >> row) {
-        // Print the third and fourth columns
-          for (unsigned int i = 2; i < row.size() && i < 4; ++i) {
-            // const string &column_name = row[i].first;
-            const string &datum = row[i].second;
-            if(i==2){
-              cout << "  label = " << datum;
-            }
-            if(i==3){
-              cout << ", content = " << datum << "\n";
-            }
-          }
-        }
-    }
-  } catch(const csvstream_exception &e){
-    cout << e.what();
-  }
-
+  csvstream trainFile = csvstream(trainF);
+  csvstream testFile = csvstream(testF);
     //-------------------------------
-  if (!(argc == 3) || !(argc == 4)){ 
+  if (!(argc == 3) && !(argc == 4)){ 
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
     return 1;
   }
-  if ((argc == 4) && (!(debug=="--debug"))){
+  if ((argc == 4) && (!(debugS=="--debug"))){
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
     return 1;
   }
-
+  if(argc == 4){
+    debugBool = true;
+    cout << "training data:" << "\n";
+  }
   Classifier mainClass(debugBool);
-  mainClass.predict();
-  // string label;
-  // int logScore;
-  //for(int i=0; i<(num of posts in file) < ++i){
-    // label = correctlyLabel(input);//input = singular post
-    // cout<< ", predicted = "<<label;
-    // logScore = predict(input);
-    // cout<< "log-probability score = "<< logScore<<endl;
-    // cout<< "content = "<<input;
-  // }
+  mainClass.train(trainFile);
 }
