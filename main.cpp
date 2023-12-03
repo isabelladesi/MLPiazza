@@ -56,14 +56,12 @@ class Classifier{
 
     for(int i=0; i<uniqueWords.size(); ++i){// each unique word
       map<string,int> innerMap = tagsWords[label];
-      
       //=function that says how many times word appears in the traininposts 
       //with label C ...[i];  number of training posts with label C that contain W
       int numCTrainPW = innerMap[allWords[i]];
       //=function that says how many times word appears in all 
       //training posts regardless of label
       int numTrainPW = words[allWords[i]];
-      
       //log liklihood
       double logLikl = 0;
       if(numCTrainPW==0 && numTrainPW!=0){ //special case 1
@@ -71,15 +69,12 @@ class Classifier{
       }
       else if(numCTrainPW==0 && numTrainPW==0){
         logLikl = log(1/numTrainPosts);
-
       }
       else{
         logLikl = log(numCTrainPW/numCTrainP);
       }
-
       prediction += logLikl;
       logLikl=0;
-
     }
     return prediction; //will return prediction score for a particular label
     // for each label find its score using equation
@@ -91,7 +86,7 @@ class Classifier{
 
   private:
   //training steps
-  int posts;
+  // int posts;
   // EFFECTS: Return a set of unique whitespace delimited words.x
   set<string> unique_words(const string &str) {
     istringstream source(str);
@@ -152,6 +147,7 @@ class Classifier{
   }
 };
 int main(int argc, char **argv) {
+  cout.precision(3);
   //open file streams
   string inputFile = argv[1];
   string testFile = argv[2];
@@ -160,13 +156,40 @@ int main(int argc, char **argv) {
   try{
     csvstream input = csvstream(inputFile);
     csvstream test = csvstream(testFile);
+
+    vector<pair<string, string>> row;
+    // map<string, string> row;
+    if(argc == 4){
+      cout << "training data:" << "\n";
+      
+        while (input >> row) {
+        // Print the third and fourth columns
+          for (unsigned int i = 2; i < row.size() && i < 4; ++i) {
+            // const string &column_name = row[i].first;
+            const string &datum = row[i].second;
+            if(i==2){
+              cout << "  label = " << datum;
+            }
+            if(i==3){
+              cout << ", content = " << datum << "\n";
+            }
+          }
+        }
+    }
   } catch(const csvstream_exception &e){
     cout << e.what();
   }
 
+    //-------------------------------
+  if (!(argc == 3) || !(argc == 4)){ 
+    cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
+    return 1;
+  }
+  if ((argc == 4) && (!(debug=="--debug"))){
+    cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
+    return 1;
+  }
   // how do you read each specific post in the file.
-
-  cout << "test data: "<<endl;
 
   // string label;
   // int logScore;
@@ -177,15 +200,4 @@ int main(int argc, char **argv) {
     // cout<< "log-probability score = "<< logScore<<endl;
     // cout<< "content = "<<input;
   // }
-
-  
-  //-------------------------------
-  if (!(argc == 3) || !(argc == 4)){ 
-    cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
-    return 1;
-  }
-  if ((argc == 4) && (!(debug=="--debug"))){
-    cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
-    return 1;
-  }
 }
