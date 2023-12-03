@@ -10,7 +10,7 @@ using namespace std;
 
 class Classifier{
   public:
-  Classifier(bool debug_in) : totalPosts(0), uniqueWords(0), debug(debug_in){};
+  Classifier(bool debug_in) : totalPosts(0), debug(debug_in){};
 
   void train(csvstream & trainStream){
     map<string, string> row;
@@ -24,14 +24,31 @@ class Classifier{
       labelWord(row);
 
       if(debug == true){
-        cout << "label = " << row["tag"];
+        cout << "  label = " << row["tag"];
         cout << ", content = " << row["content"] << "\n";
       }
     }
 
     cout << "trained on " << totalPosts << " examples" << endl;
     if (debug == true){
-      cout << "vocabulary size = " << words.size() << endl; 
+      cout << "vocabulary size = " << words.size() << endl;
+
+      cout << "classes:" << endl;
+      for (const auto& pair : tags) {
+        cout << "  " << pair.first << ", " << pair.second << " examples, log-prior = " << endl;
+      }
+
+      cout << "classifier parameters:" << endl;
+      for (const auto& outerMap : tagsWords) {
+        const string& outerTag = outerMap.first;
+        const map<string, int>& innerMap = outerMap.second;
+        // Iterate through the inner map
+        for (const auto& innerMap : innerMap) {
+            const string& innerWord = innerMap.first;
+            int innerValue = innerMap.second;
+            cout << "  " << outerTag << ":" << innerWord << ", count = " << innerValue << ", log-likelihood = " << endl;
+        }
+      }
     }
   }
 
@@ -44,7 +61,6 @@ class Classifier{
       logScore = predict(*it);
       cout<< "log-probability score = "<< logScore<<endl;
       cout<< "content = "<<*it;
-      
     }
   }
 
@@ -110,7 +126,6 @@ class Classifier{
     // the classifier will pick the label with the highest score
     // there should be n log likelihood terms. n = number of UNIQUE words in string (post)
     //in divisions: cast the numer and denom as double before 
-
   }
 
   private:
@@ -131,7 +146,6 @@ class Classifier{
   map<string, int> words;
   vector<string> labels; //set
   int totalPosts;
-  int uniqueWords;
   bool debug;
   set<string> allWordSet;
   //checks number of labels
@@ -170,10 +184,10 @@ class Classifier{
     set<string> wordSet = unique_words(word);
       for (auto it = wordSet.begin(); it != wordSet.end(); ++it) {
         if((words.find(*it)!= words.end()) && (tags.find(tag)!= tags.end())){
-          tagsWords[tag][word] += 1;
+          tagsWords[tag][*it] += 1;
         }
         else{
-          tagsWords[tag][word]=1;
+          tagsWords[tag][*it]=1;
         }
       }
   }
