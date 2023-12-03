@@ -13,10 +13,17 @@ class Classifier{
   void train(csvstream & trainStream, bool debug){
     map<string, string> row;
     while(trainStream >> row){
+      string words = row["content"];
+      set<string> wordSet = unique_words(words);
+      uniqueWords = uniqueWords + wordSet.size();
+      totalPosts = totalPosts + 1;
       label(row);
       word(row);
       labelWord(row);
     }
+    totalPosts = totalPosts - 1;
+    cout << "trained on " << totalPosts << " examples" << endl;
+    cout << "vocabulary size = " << uniqueWords << endl; 
   }
 
   string correctlyLabel(csvstream & singularPost){ //a post
@@ -102,6 +109,7 @@ class Classifier{
   map<string, int> words;
   vector<string> labels; //set
   int totalPosts=0;
+  int uniqueWords = 0;
   //checks number of labels
   void label(map<string, string> & row){
     string tag = row["tag"];
@@ -189,8 +197,6 @@ int main(int argc, char **argv) {
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
     return 1;
   }
-  // how do you read each specific post in the file.
-
   // string label;
   // int logScore;
   //for(int i=0; i<(num of posts in file) < ++i){
