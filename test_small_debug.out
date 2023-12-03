@@ -7,4 +7,60 @@ training data:
   label = calculator, content = how to assert rational invariants
   label = calculator, content = does stack need its own big three
   label = calculator, content = valgrind memory error not sure what it means
-Usage: main.exe TRAIN_FILE TEST_FILE [--debug]
+trained on 8 examples
+vocabulary size = 49
+classes:
+  calculator, 3 examples, log-prior = 
+  euchre, 5 examples, log-prior = 
+classifier parameters:
+  calculator:assert, count = 1, log-likelihood = 
+  calculator:big, count = 1, log-likelihood = 
+  calculator:does, count = 1, log-likelihood = 
+  calculator:error, count = 1, log-likelihood = 
+  calculator:how, count = 1, log-likelihood = 
+  calculator:invariants, count = 1, log-likelihood = 
+  calculator:it, count = 1, log-likelihood = 
+  calculator:its, count = 1, log-likelihood = 
+  calculator:means, count = 1, log-likelihood = 
+  calculator:memory, count = 1, log-likelihood = 
+  calculator:need, count = 1, log-likelihood = 
+  calculator:not, count = 1, log-likelihood = 
+  calculator:own, count = 1, log-likelihood = 
+  calculator:rational, count = 1, log-likelihood = 
+  calculator:stack, count = 1, log-likelihood = 
+  calculator:sure, count = 1, log-likelihood = 
+  calculator:three, count = 1, log-likelihood = 
+  calculator:to, count = 1, log-likelihood = 
+  calculator:valgrind, count = 1, log-likelihood = 
+  calculator:what, count = 1, log-likelihood = 
+  euchre:a, count = 2, log-likelihood = 
+  euchre:anyone, count = 1, log-likelihood = 
+  euchre:be, count = 1, log-likelihood = 
+  euchre:bob, count = 1, log-likelihood = 
+  euchre:bower, count = 1, log-likelihood = 
+  euchre:can, count = 1, log-likelihood = 
+  euchre:card, count = 3, log-likelihood = 
+  euchre:cheating, count = 1, log-likelihood = 
+  euchre:dealer, count = 1, log-likelihood = 
+  euchre:euchre, count = 1, log-likelihood = 
+  euchre:ever, count = 2, log-likelihood = 
+  euchre:from, count = 1, log-likelihood = 
+  euchre:hand, count = 1, log-likelihood = 
+  euchre:he, count = 1, log-likelihood = 
+  euchre:how, count = 1, log-likelihood = 
+  euchre:is, count = 1, log-likelihood = 
+  euchre:left, count = 1, log-likelihood = 
+  euchre:play, count = 1, log-likelihood = 
+  euchre:played, count = 1, log-likelihood = 
+  euchre:players, count = 1, log-likelihood = 
+  euchre:prefer, count = 1, log-likelihood = 
+  euchre:remove, count = 1, log-likelihood = 
+  euchre:same, count = 1, log-likelihood = 
+  euchre:some, count = 1, log-likelihood = 
+  euchre:the, count = 3, log-likelihood = 
+  euchre:to, count = 3, log-likelihood = 
+  euchre:twice, count = 1, log-likelihood = 
+  euchre:upcard, count = 2, log-likelihood = 
+  euchre:want, count = 1, log-likelihood = 
+  euchre:when, count = 1, log-likelihood = 
+  euchre:would, count = 1, log-likelihood = 
