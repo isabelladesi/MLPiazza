@@ -35,7 +35,8 @@ class Classifier{
 
       cout << "classes:" << endl;
       for (const auto& pair : tags) {
-        cout << "  " << pair.first << ", " << pair.second << " examples, log-prior = " << endl;
+        cout << "  " << pair.first << ", " << pair.second 
+          << " examples, log-prior = " << endl;
       }
 
       cout << "classifier parameters:" << endl;
@@ -46,7 +47,8 @@ class Classifier{
         for (const auto& innerMap : innerMap) {
             const string& innerWord = innerMap.first;
             int innerValue = innerMap.second;
-            cout << "  " << outerTag << ":" << innerWord << ", count = " << innerValue << ", log-likelihood = " << endl;
+            cout << "  " << outerTag << ":" << innerWord << ", count = " 
+              << innerValue << ", log-likelihood = " << endl;
         }
       }
     }
