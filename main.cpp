@@ -10,6 +10,8 @@ using namespace std;
 
 class Classifier{
   public:
+  Classifier(bool debug_in) : debug(debug_in), totalPosts(0), uniqueWords(0){};
+
   void train(csvstream & trainStream, bool debug){
     map<string, string> row;
     while(trainStream >> row){
@@ -108,8 +110,9 @@ class Classifier{
   map<string, map<string,int>> tagsWords; //label word int
   map<string, int> words;
   vector<string> labels; //set
-  int totalPosts=0;
-  int uniqueWords = 0;
+  int totalPosts;
+  int uniqueWords;
+  bool debug;
   //checks number of labels
   void label(map<string, string> & row){
     string tag = row["tag"];
@@ -160,6 +163,7 @@ int main(int argc, char **argv) {
   string inputFile = argv[1];
   string testFile = argv[2];
   string debug = argv[3];
+  bool debugBool = false;
   
   try{
     csvstream input = csvstream(inputFile);
@@ -168,6 +172,7 @@ int main(int argc, char **argv) {
     vector<pair<string, string>> row;
     // map<string, string> row;
     if(argc == 4){
+      debugBool = true;
       cout << "training data:" << "\n";
       
         while (input >> row) {
@@ -197,6 +202,9 @@ int main(int argc, char **argv) {
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
     return 1;
   }
+
+  Classifier mainClass(debugBool);
+  mainClass.predict();
   // string label;
   // int logScore;
   //for(int i=0; i<(num of posts in file) < ++i){
