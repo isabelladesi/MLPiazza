@@ -37,19 +37,22 @@ class Classifier{
       cout << "classes:" << endl;
       for (const auto& pair : tags) {
         cout << "  " << pair.first << ", " << pair.second 
-          << " examples, log-prior = " << log_prior(pair.first, pair.second, totalPosts)<< endl;
+          << " examples, log-prior = " 
+            << log_prior(pair.first, pair.second, totalPosts)<< endl;
       }
 
       cout << "classifier parameters:" << endl;
       for (const auto& outerMap : tagsWords) {
         const string& outerTag = outerMap.first; //label
-        const map<string, int>& innerMap = outerMap.second; //word,int (how many times word appears under label)
+        //word,int (how many times word appears under label)
+        const map<string, int>& innerMap = outerMap.second; 
         // Iterate through the inner map
         for (const auto& innerMap : innerMap) {
             const string& innerWord = innerMap.first; //word
             int innerValue = innerMap.second; //int
             cout << "  " << outerTag << ":" << innerWord << ", count = " 
-              << innerValue << ", log-likelihood = " << log_liklihood(outerTag, innerValue, words[innerWord], tags[outerTag])<< endl;
+    << innerValue << ", log-likelihood = " << log_liklihood(outerTag, 
+      innerValue, words[innerWord], tags[outerTag])<< endl;
         }
       }
     }
@@ -65,7 +68,8 @@ class Classifier{
       cout << "  correct = " << row["tag"];
       string label;
       int logScore;
-     // for (auto it = allWordSet.begin(); it!=allWordSet.end(); it++){ //goes thorugh each word in content
+     // (auto it = allWordSet.begin(); it!=allWordSet.end(); it++)
+      //goes thorugh each word in content
         label = correctlyLabel(testWords);//input = singular post
         cout<< ", predicted = "<<label;
         logScore = predict(label, testWords);
@@ -106,7 +110,8 @@ class Classifier{
     log_Prior = log(div);
     return log_Prior;
   }
-  double log_liklihood(string label,double numCTrainPostsWithW, double numTrainPostswithW, double numTrainPWithC){
+  double log_liklihood(string label,double numCTrainPostsWithW, 
+    double numTrainPostswithW, double numTrainPWithC){
     double logLiklihood=0;
     if(numCTrainPostsWithW==0 && numTrainPostswithW!=0){ //special case 1
         double div1 = numTrainPostswithW/totalPosts;
@@ -125,7 +130,8 @@ class Classifier{
 
   double predict(string label, string postContent) { 
     //gives unique words string. words=long string that holds posts content
-    set<string> uniqueWords = unique_words(postContent);  //all unique words in content of deisignated post
+     //all unique words in content of deisignated post
+    set<string> uniqueWords = unique_words(postContent); 
     //auto it = uniqueWords.begin();
     // vector<string> allWords;
     // int j=0;
@@ -182,7 +188,8 @@ class Classifier{
     return words;
   }
   map<string, int> tags;
-  map<string, map<string,int>> tagsWords; //label word int(how many times word appears in that label)
+  //label word int(how many times word appears in that label)
+  map<string, map<string,int>> tagsWords; 
   map<string, int> words;
   vector<string> labels; //set
   int totalPosts;
