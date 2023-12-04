@@ -62,28 +62,34 @@ class Classifier{
     cout<<endl;
     cout<<"test data:"<<endl;
     map<string, string> row;
+    int countAccuracy=0;
+    int totalTrainPosts=0;
     while(testStream >> row){
+      totalTrainPosts++;
       string testWords = row["content"];
       allWordSet = unique_words(testWords);
       cout << "  correct = " << row["tag"];
       string label;
-      int logScore;
+      double logScore;
      // (auto it = allWordSet.begin(); it!=allWordSet.end(); it++)
       //goes thorugh each word in content
         label = correctlyLabel(testWords);//input = singular post
         cout<< ", predicted = "<<label;
         logScore = predict(label, testWords);
-        cout<< "log-probability score = "<< logScore<<endl;
-        cout<< " content = "<<testWords<<endl;
+        cout<< ", log-probability score = "<< logScore<<endl;
+        cout<< "  content = "<<testWords<<endl;
         cout<<endl;
+        if(row["tag"] == label){
+          countAccuracy++;
+        }
      // }
     }
-    cout << "performance: "<<" / "<< "posts predicted correctly"<<endl;
+    cout << "performance: "<< countAccuracy<<" / "<<totalTrainPosts<< " posts predicted correctly"<<endl;
   }
 
   string correctlyLabel(string singularPost){ //a post
-    double score;
-    double maxScore;
+    double score=0;
+    double maxScore=-1000000;
     string correctLabel;
     for (const auto& pair : tags) { //for each label
       score = predict(pair.first , singularPost);
@@ -114,10 +120,12 @@ class Classifier{
     double numTrainPostswithW, double numTrainPWithC){
     double logLiklihood=0;
     if(numCTrainPostsWithW==0 && numTrainPostswithW!=0){ //special case 1
-        logLiklihood = log(numTrainPostswithW/totalPosts);
+        double div1 = numTrainPostswithW/totalPosts;
+        logLiklihood = log(div1);
       }
       else if(numCTrainPostsWithW==0 && numTrainPostswithW==0){
-        logLiklihood = log(1/totalPosts);
+        double div2 = 1.0/totalPosts;
+        logLiklihood = log(div2);
       }
       else{
         double div = numCTrainPostsWithW/numTrainPWithC;
@@ -145,17 +153,17 @@ class Classifier{
     double numTrainPosts = totalPosts;       // number of training posts
     double logPrior = log_prior(label, numCTrainP, numTrainPosts);
     prediction += logPrior;
-    int i=0;
-    while(i<uniqueWords.size()){
+    // int i=0;
+    // while(i<uniqueWords.size()){ //each unique word in the designated post
     // for(int i=0; i<uniqueWords.size(); ++i){// each unique word
-      map<string,int> innerMap = tagsWords[label];
-      for (auto it = innerMap.begin(); it != innerMap.end(); ++it) {
+      map<string,int> innerMap = tagsWords[label]; //how many times word appears in that label
+      for (auto it = uniqueWords.begin(); it != uniqueWords.end(); ++it) {
         //=function that says how many times word appears in the traininposts 
         //with label C ...[i];  number of training posts with label C that contain W
-        double numCTrainPW = innerMap[it->first];
+        double numCTrainPW = innerMap[*it];//it->first];
         //=function that says how many times word appears in all 
         //training posts regardless of label
-        double numTrainPW = words[it->first];
+        double numTrainPW = words[*it];//it->first];
         //log liklihood
         double logLikl = 0;
         logLikl = log_liklihood(label,numCTrainPW, numTrainPW, numCTrainP);
@@ -163,8 +171,8 @@ class Classifier{
         prediction += logLikl;
         logLikl=0;
       }
-      i++;
-    }
+    //   i++;
+    // }
     return prediction; //will return prediction score for a particular label
     // for each label find its score using equation
     // the classifier will pick the label with the highest score
