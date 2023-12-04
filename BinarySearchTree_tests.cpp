@@ -192,6 +192,25 @@ TEST(test_check_sorting_invariant) {
     ASSERT_FALSE(b.check_sorting_invariant());
 }
 
+TEST(test_check_sorting_invariant_moreInDepth) {
+    BinarySearchTree<int> b;
+    b.insert(5);
+    b.insert(6);
+    b.insert(7);
+    b.insert(9);
+    // b.insert(4);
+    // change first datum to 2, resulting in the first broken tree above
+    *b.begin() = 8;
+    ASSERT_FALSE(b.check_sorting_invariant());
+
+    BinarySearchTree<int> b1;
+    b1.insert(5);
+    b1.insert(4);
+    b1.insert(6);
+    *b1.begin() = 8;
+    ASSERT_FALSE(b1.check_sorting_invariant());
+}
+
 TEST(test_min_element) {
     BinarySearchTree<int> b; //how do u check this then
     ASSERT_EQUAL(b.min_element(), b.end());
