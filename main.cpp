@@ -62,28 +62,34 @@ class Classifier{
     cout<<endl;
     cout<<"test data:"<<endl;
     map<string, string> row;
+    int countAccuracy=0;
+    int totalTrainPosts=0;
     while(testStream >> row){
+      totalTrainPosts++;
       string testWords = row["content"];
       allWordSet = unique_words(testWords);
       cout << "  correct = " << row["tag"];
       string label;
-      int logScore;
+      double logScore;
      // (auto it = allWordSet.begin(); it!=allWordSet.end(); it++)
       //goes thorugh each word in content
         label = correctlyLabel(testWords);//input = singular post
         cout<< ", predicted = "<<label;
         logScore = predict(label, testWords);
-        cout<< "log-probability score = "<< logScore<<endl;
-        cout<< " content = "<<testWords<<endl;
+        cout<< ", log-probability score = "<< logScore<<endl;
+        cout<< "  content = "<<testWords<<endl;
         cout<<endl;
+        if(row["tag"] == label){
+          countAccuracy++;
+        }
      // }
     }
-    cout << "performance: "<<" / "<< "posts predicted correctly"<<endl;
+    cout << "performance: "<< countAccuracy<<" / "<<totalTrainPosts<< " posts predicted correctly"<<endl;
   }
 
   string correctlyLabel(string singularPost){ //a post
-    double score;
-    double maxScore;
+    double score=0;
+    double maxScore=-1000000;
     string correctLabel;
     for (const auto& pair : tags) { //for each label
       score = predict(pair.first , singularPost);
