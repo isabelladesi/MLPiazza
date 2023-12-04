@@ -84,7 +84,8 @@ class Classifier{
         }
      // }
     }
-    cout << "performance: "<< countAccuracy<<" / "<<totalTrainPosts<< " posts predicted correctly"<<endl;
+    cout << "performance: "<< countAccuracy<<" / "<<totalTrainPosts 
+    << " posts predicted correctly"<<endl;
   }
 
   string correctlyLabel(string singularPost){ //a post
@@ -156,7 +157,8 @@ class Classifier{
     // int i=0;
     // while(i<uniqueWords.size()){ //each unique word in the designated post
     // for(int i=0; i<uniqueWords.size(); ++i){// each unique word
-      map<string,int> innerMap = tagsWords[label]; //how many times word appears in that label
+      map<string,int> innerMap = tagsWords[label]; //how many times word 
+      //appears in that label
       for (auto it = uniqueWords.begin(); it != uniqueWords.end(); ++it) {
         //=function that says how many times word appears in the traininposts 
         //with label C ...[i];  number of training posts with label C that contain W
@@ -176,7 +178,7 @@ class Classifier{
     return prediction; //will return prediction score for a particular label
     // for each label find its score using equation
     // the classifier will pick the label with the highest score
-    // there should be n log likelihood terms. n = number of UNIQUE words in string (post)
+    // there should be n log likelihood terms. n = number of UNIQUE words in string
     //in divisions: cast the numer and denom as double before 
   }
 
