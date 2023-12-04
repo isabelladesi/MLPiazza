@@ -250,7 +250,6 @@ int main(int argc, char **argv) {
   //open file streams
   string trainF = argv[1];
   string testF = argv[2];
-  string debugS = argv[3];
   bool debugBool = false;
   csvstream trainFile = csvstream(trainF);
   csvstream testFile = csvstream(testF);
@@ -259,9 +258,12 @@ int main(int argc, char **argv) {
     cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
     return 1;
   }
-  if ((argc == 4) && (!(debugS=="--debug"))){
-    cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
-    return 1;
+  if (argc == 4){
+    string debugS = argv[3];
+    if(!(debugS=="--debug")){
+      cout << "Usage: main.exe TRAIN_FILE TEST_FILE [--debug]"<< endl;
+      return 1;
+    }
   }
   if(argc == 4){
     debugBool = true;
