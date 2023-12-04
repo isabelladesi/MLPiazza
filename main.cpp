@@ -109,10 +109,12 @@ class Classifier{
   double log_liklihood(string label,double numCTrainPostsWithW, double numTrainPostswithW, double numTrainPWithC){
     double logLiklihood=0;
     if(numCTrainPostsWithW==0 && numTrainPostswithW!=0){ //special case 1
-        logLiklihood = log(numTrainPostswithW/totalPosts);
+        double div1 = numTrainPostswithW/totalPosts;
+        logLiklihood = log(div1);
       }
       else if(numCTrainPostsWithW==0 && numTrainPostswithW==0){
-        logLiklihood = log(1/totalPosts);
+        double div2 = 1.0/totalPosts;
+        logLiklihood = log(div2);
       }
       else{
         double div = numCTrainPostsWithW/numTrainPWithC;
@@ -139,17 +141,17 @@ class Classifier{
     double numTrainPosts = totalPosts;       // number of training posts
     double logPrior = log_prior(label, numCTrainP, numTrainPosts);
     prediction += logPrior;
-    int i=0;
-    while(i<uniqueWords.size()){
+    // int i=0;
+    // while(i<uniqueWords.size()){ //each unique word in the designated post
     // for(int i=0; i<uniqueWords.size(); ++i){// each unique word
-      map<string,int> innerMap = tagsWords[label];
-      for (auto it = innerMap.begin(); it != innerMap.end(); ++it) {
+      map<string,int> innerMap = tagsWords[label]; //how many times word appears in that label
+      for (auto it = uniqueWords.begin(); it != uniqueWords.end(); ++it) {
         //=function that says how many times word appears in the traininposts 
         //with label C ...[i];  number of training posts with label C that contain W
-        double numCTrainPW = innerMap[it->first];
+        double numCTrainPW = innerMap[*it];//it->first];
         //=function that says how many times word appears in all 
         //training posts regardless of label
-        double numTrainPW = words[it->first];
+        double numTrainPW = words[*it];//it->first];
         //log liklihood
         double logLikl = 0;
         logLikl = log_liklihood(label,numCTrainPW, numTrainPW, numCTrainP);
@@ -157,8 +159,8 @@ class Classifier{
         prediction += logLikl;
         logLikl=0;
       }
-      i++;
-    }
+    //   i++;
+    // }
     return prediction; //will return prediction score for a particular label
     // for each label find its score using equation
     // the classifier will pick the label with the highest score
